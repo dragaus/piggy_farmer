@@ -13,6 +13,8 @@ public class SpawnableManager : MonoBehaviour
     GameObject spawnablePrefab;
 
     GameObject spawnedObject;
+
+    Vector2 lastPosition;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,16 @@ public class SpawnableManager : MonoBehaviour
             {
                 spawnedObject.transform.position = m_Hits[0].pose.position;
             }
+
+            if (Input.touchCount > 1)
+            {
+                var secondTouch = Input.GetTouch(1);
+                if (Input.GetTouch(1).phase == TouchPhase.Moved && spawnedObject != null)
+                {
+                    spawnedObject.transform.Rotate(20f * Time.deltaTime * (secondTouch.position.x - lastPosition.x) * Vector3.up);
+                    lastPosition = secondTouch.position;
+                }
+            }    
 
             if (Input.GetTouch(0).phase == TouchPhase.Ended)
             {
